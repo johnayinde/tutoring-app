@@ -16,23 +16,23 @@ router.get('/v1/tutors', Person.tutor.getAll);
 //by firstname, sorted alphabetically in ascending order
 
 //admin roles
-// router.post('/v1/subjects', Admin.subject.create);
-// router.delete('/v1/subjects/:subject_id', Admin.subject.delete);
-// router.post('/v1/subjects/:subject_id', Admin.subject.update);
+router.post('/v1/subjects', Admin.subject.create);
+router.delete('/v1/subjects/:subject_id', Admin.subject.delete);
+router.post('/v1/subjects/:subject_id', Admin.subject.update);
 
-// router.post('/v1/category', Admin.category.create);
-// router.post('/v1/category/:category_id', Admin.category.update);
-// router.delete('/v1/category/:category_id', Admin.category.delete);
+router.post('/v1/category', Admin.category.create);
+router.post('/v1/category/:category_id', Admin.category.update);
+router.delete('/v1/category/:category_id', Admin.category.delete);
 
-// router.post('/v1/lessons', Admin.lesson.create);
-// router.get('/v1/lessons', Admin.lesson.getAll);
-// router.post('/v1/lessons/:_id', Admin.lesson.get);
-// router.post('/v1/lessons/:_id', Admin.lesson.update);
-// router.delete('/v1/lessons/_id', Admin.lesson.delete);
+router.post('/v1/lessons', Admin.lesson.create);
+router.get('/v1/lessons', Admin.lesson.getAll);
+router.post('/v1/lessons/:_id', Admin.lesson.get);
+router.post('/v1/lessons/:_id', Admin.lesson.update);
+router.delete('/v1/lessons/_id', Admin.lesson.delete);
 
-// router.get('/v1/tutors', Admin.tutor.getAll);
-// router.get('/v1/tutors/:tutor_id', Admin.tutor.get);
-// router.get('/v1/tutors', Admin.tutor.update);//for both deactivating and assigning admin status
+router.get('/v1/tutors', Admin.tutor.getAll);
+router.get('/v1/tutors/:tutor_id', Admin.tutor.get);
+router.get('/v1/tutors', Admin.tutor.update);//for both deactivating and assigning admin status
   
 // //tutor roles
 // router.post('/v1/tutors/:username/register', Tutor.subject.register);
@@ -46,6 +46,7 @@ router.get('/v1/tutors', Person.tutor.getAll);
 
 
 //default response
+
 router.get('/v1/', (req, res) =>{
     res.send('Welcome to SNOSch--StartNG Online School. Kindly read the manual for guides.');
 });
