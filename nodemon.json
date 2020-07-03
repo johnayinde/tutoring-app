@@ -2,7 +2,7 @@
   "env": {
     "MONGO_ATLAS_PW": "Ayindeno1.",
     "JWT_KEY": "secret",
-    "PORT": "3000",
+    "PORT": "8080",
     "CONNECTION_URL": "mongodb+srv://ayindejohn:Ayindeno1.@cluster0-ibfxg.mongodb.net/test?retryWrites=true&w=majority"
   }
 }

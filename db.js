@@ -1,13 +1,15 @@
 const mongoose = require("mongoose");
+const express = require('express');
+const app = express();
+// const port = process.env.PORT || 8080;
 
 mongoose
   .connect(process.env.CONNECTION_URL, {
     useNewUrlParser: true,
-     useUnifiedTopology: true,
+    useUnifiedTopology: true,
     useCreateIndex: true,
   })
   .then((result) => {
     console.log("Database connected");
-    // app.listen(3000);
   })
   .catch((err) => console.log(err));

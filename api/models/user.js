@@ -6,12 +6,12 @@ const validate = require("validator");
 //Schema for the users
 const userSchema = new Schema(
   {
-    firstName: {
+    firstname: {
       type: String,
       required: true,
       trim: true,
     },
-    lastName: {
+    lastname: {
       type: String,
       required: true,
       trim: true,
@@ -25,11 +25,11 @@ const userSchema = new Schema(
       type: String,
       unique: true,
       required: true,
-      validate: (value) => {
-        if (!validate.isEmail(validate)) {
-          throw new Error({ error: "invalid Email address" });
-        }
-      },
+      // validate: (value) => {
+      //   if (!validate.isEmail(validate)) {
+      //     throw new Error({ error: "invalid Email address" });
+      //   }
+      // },
     },
 
     token: {

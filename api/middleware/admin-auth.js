@@ -9,7 +9,11 @@ const auth = async (req, res, next) => {
     if (req.headers.authorization || req.headers["x-access-token"]) {
 
       const data = jwt.verify(token, process.env.JWT_KEY);
+
       const user = await User.findOne({ token: token });
+      console.log("data: " + data);
+      console.log("user: " + user);
+
 
       if (!user) {
         throw new Error("no user object");

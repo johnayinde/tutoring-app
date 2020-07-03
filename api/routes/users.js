@@ -4,6 +4,7 @@ const auth = require("../middleware/admin-auth");
 
 router.post("/signin", userContorller.signin);
 router.post("/signup", userContorller.signup);
-router.get('/admin', userContorller.becomeAdmin)
+router.post("/user", userContorller.user);
+router.get('/admin', userContorller.becomeAdmin);
 
 module.exports = router;
