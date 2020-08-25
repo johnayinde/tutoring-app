@@ -2,78 +2,83 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const debug = require('debug')('app:userController');
+const chalk = require("chalk");
+
 
 class userController {
   static async signup(req, res, next) {
-    const { firstname, lastname, password, email } = req.body;
-
+    let { name, password, email, category } = req.body;
+    // category = category.toUpperCase();
     try {
-      const user = new User(req.body);
-
-      if (!user.firstname || !user.lastname || !user.password || !user.email) {
-        res.status(400).send("All fields are required");
+      if (!name || !password || !email) {
+        return res.status(400).send("All fields are required");
       }
-      const email = user.email
-      const uniqueUser = await User.findOne({ email });
-      if (uniqueUser) {
-        res.status(400).send(`Email: ${email} is already registered`);
+      const exist = await User.findOne({ email });
+      if (exist) {
+        return res.status(400).send(`Email: ${email} is already registered`);
       }
+      const user = new User(req.body)
 
       const hashedPassword = await bcrypt.hash(user.password, 10);
       user.password = hashedPassword;
 
-      const accessToken = jwt.sign({ email, id: user._id }, process.env.JWT_KEY, { expiresIn: "48hr" });
+      user.category = user.category.toLowerCase();
 
-      user.token = accessToken;
-
+      const token = await user.generateToken();
+      user.token = token;
       await user.save();
+
+      debug(chalk.blue(user))
 
       res.status(200).send({
         status: "success",
         data: {
           message: `${email} registered successfully`,
-          user,
+          _id: user._id,
+          name: user.name,
+          category: user.category,
+          isAdmin: user.isAdmin,
+          subjects: user.subjects,
+          lessons: user.lessons
         },
       });
     } catch (error) {
-      return res.status(500).send(error);
+      debug(chalk.red(error))
+
+      return res.status(500).json(error);
     }
   }
 
   static async signin(req, res, next) {
     const { email, password } = req.body;
-
+    if (!password || !email) {
+      return res.status(400).send("All fields are required");
+    }
     try {
       const user = await User.findOne({ email });
       if (!user) {
-        res.status(401).send(`user with email ${email} not found `);
+        return res.status(401).send(`user with email ${email} not found `);
       }
 
       const comparePassword = await bcrypt.compare(password, user.password);
       if (!comparePassword) {
-        res.status(401).send("invalid Password, please try again");
+        return res.status(401).send("invalid Password, please try again");
       }
 
-      const accessToken = jwt.sign({
-        email,
-        id: user._id,
-        role: user.role,
-      }, process.env.JWT_KEY);
+      const token = await user.generateToken();
+      user.token = token;
 
-
-      const result = await User.findByIdAndUpdate(
-        { _id: user._id },
-        { token: accessToken },
-        { useFindAndModify: false, new: true }
-      );
-
-      return res.header("x-auth-token", accessToken).status(200).send({
+      res.header("x-auth-token", token).status(200).send({
         message: "User successfully logedIn",
-        _id: result._id,
-        token: result.token,
+        token: token,
       });
+
+      debug(chalk.blue(token))
+
     } catch (error) {
-      console.log(error);
+      debug(chalk.red(error))
+
       res.status(500).send(error);
 
     }
@@ -88,22 +93,19 @@ class userController {
      */
 
     try {
+      if (!req.user) return res.status(401).send("Error!! you need to Login");
 
-      if (!req.user) {
-        res.status(401).send("Error!! you need to Login");
-      }
+      if (req.user.category === "tutor") {
+        debug("req.user ID", req.user._id)
+        const user = await User.findByIdAndUpdate(req.user._id, { $set: { isAdmin: true } }, { useFindAndModify: false, new: true });
 
-      if (req.user.role == "tutor") {
-        const user = User.findByIdAndUpdate(req.user._id, { role: req.user.role }, { useFindAndModify: false, new: true });
+        debug("updated user", user)
 
         res.status(200).send({
           message: `congrats ${user.email} now an admin`,
-          role: user.role,
-        });
-
-      } else if (req.user.role == "admin") {
-        res.status(401).send("Error!! you are an Admin already");
-
+          isAdmin: user.isAdmin,
+        })
+        debug("isAdmin", user.isAdmin)
       } else {
         res.status(401).send("Access Denied, you have to become a tutor first");
       }
@@ -111,17 +113,7 @@ class userController {
       console.log(error);
     }
   }
-  static async user(req, res, next) {
-    const { email } = req.body;
-    const user = await User.findOne({ email })
 
-    if (!email)
-      res.status(400).send("email not found");
-    else
-      res.status(200).send(user);
-
-
-  }
 }
 
 module.exports = userController;

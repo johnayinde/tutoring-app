@@ -6,7 +6,10 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
 
-require("./db");
+require("dotenv").config();
+
+
+require("./startup/db");
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
