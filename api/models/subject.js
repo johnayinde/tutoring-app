@@ -1,5 +1,5 @@
 //Schema for the subjects
-const mongoose = require ("mongoose");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 
@@ -8,19 +8,16 @@ const subjectSchema = new Schema({
         type: String,
         required: true
     },
-    schoolCategory: {
-        type: Schema.Types.String,
-        ref: 'Category'
+    class: {
+        type: String,
+        enum: ['pry', 'jss', 'sss']
     },
     tutors: [{
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Tutors'
     }],
-    students: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-},{timestamps: true});
+
+}, { timestamps: true });
 
 
 module.exports = mongoose.model('Subject', subjectSchema);

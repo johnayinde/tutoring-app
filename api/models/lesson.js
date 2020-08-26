@@ -4,24 +4,22 @@ const Schema = mongoose.Schema;
 
 
 const lessonSchema = new Schema({
+    subject: {
+        type: String,
+        required: true
+    },
+    class: {
+        type: String,
+        enum: ['primary', 'jss', 'sss']
+    },
+    tutor: {
+        type: String,
+        required: true,
+    },
     student: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    schoolCategory: {
-        type: Schema.Types.ObjectId,
-        ref: 'Category'
-    },
-
-    subject: {
-        type: Schema.Types.ObjectId,
-        ref: 'Subject'
-    },
-    tutor: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
-
 
 }, { timestamps: true });
 

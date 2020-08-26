@@ -1,12 +1,12 @@
 //Schema for the category
-const mongoose = require ("mongoose");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 
 const categorySchema = new Schema({
     name: {
-        type: String,
-        required: true
+        emum: ['student', 'tutor'],
+        type: String
     },
     subjects: [{
         type: Schema.Types.ObjectId,
@@ -14,13 +14,17 @@ const categorySchema = new Schema({
     }],
     tutors: [{
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Tutor'
     }],
     students: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
-},{timestamps: true});
+    lesson: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Lesson'
+    }],
+}, { timestamps: true });
 
 
 module.exports = mongoose.model('Category', categorySchema);
