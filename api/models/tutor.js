@@ -6,9 +6,9 @@ const tutorSchema = new Schema({
       type: String,
       required: true
    },
-   class: {
+   level: {
       type: String,
-      enum: ['primary', 'jss', 'sss']
+      enum: ['pry', 'jss', 'sss']
    },
    subject: {
       type: Array
