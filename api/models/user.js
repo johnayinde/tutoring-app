@@ -6,54 +6,48 @@ const validate = require("validator");
 //Schema for the users
 const userSchema = new Schema(
   {
-    firstname: {
+    name: {
       type: String,
       required: true,
-      trim: true,
-    },
-    lastname: {
-      type: String,
-      required: true,
-      trim: true,
     },
     password: {
       type: String,
       required: true,
     },
-
     email: {
       type: String,
       unique: true,
       required: true,
-      // validate: (value) => {
-      //   if (!validate.isEmail(validate)) {
-      //     throw new Error({ error: "invalid Email address" });
-      //   }
-      // },
+      trim: true,
     },
-
     token: {
+      type: String
+    },
+    category: {
       type: String,
       required: true,
+      default: 'student',
+      enum: ['student', 'tutor']
     },
-
-    lesson: {
-      type: Schema.Types.ObjectId,
-      ref: "Lesson",
+    isAdmin: {
+      type: Boolean,
+      default: false
     },
-
     subjects: {
-      type: Array,
+      type: Array
     },
+    lessons: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Lesson'
+    }],
+  }, { timestamps: true });
 
-    role: {
-      type: String,
-      enum: ["student", "tutor", "admin"],
-      default: "student",
-    },
-  },
 
-  { timestamps: true }
-);
+userSchema.methods.generateToken = function () {
+  const token = jwt.sign({ _id: this._id, name: this.name, isAdmin: this.isAdmin, category: this.category },
+    process.env.JWT_KEY);
+  return token;
+}
 
-module.exports = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema);
+module.exports = User

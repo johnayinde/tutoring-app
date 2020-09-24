@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const express = require('express');
 const app = express();
-// const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
 mongoose
   .connect(process.env.CONNECTION_URL, {
@@ -10,6 +10,6 @@ mongoose
     useCreateIndex: true,
   })
   .then((result) => {
-    console.log("Database connected");
+    console.log(`Database connected @ PORT ${PORT}`);
   })
   .catch((err) => console.log(err));
