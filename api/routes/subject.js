@@ -17,7 +17,6 @@ const {
    deleteRegisteredSubject } = require("../controllers/subject");
 
 const auth = require("../middleware/auth");
-const delet = require("../middleware/delete");
 const adminAuth = require("../middleware/adminAuth");
 const tutorAuth = require("../middleware/adminAuth");
 
