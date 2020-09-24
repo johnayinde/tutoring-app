@@ -1,14 +1,16 @@
 const express = require("express");
 const app = express();
-const userRoute = require("./api/routes/users");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const userRoute = require("./api/routes/users");
+const categoryRoute = require("./api/routes/category");
+const subjectRoute = require("./api/routes/subject");
+const lessonRoute = require("./api/routes/lesson");
+const tutorRoute = require("./api/routes/tutor");
 
 
 require("dotenv").config();
-
-
 require("./startup/db");
 
 app.use(morgan("dev"));
@@ -29,6 +31,10 @@ app.use((req, res, next) => {
 })
 
 app.use("/api/v1", userRoute);
+app.use("/api/v1/category", categoryRoute);
+app.use("/api/v1/subject", subjectRoute);
+app.use("/api/v1/lesson", lessonRoute);
+app.use("/api/v1/tutor", tutorRoute);
 
 app.get('/', (req, res, next) => {
    res.send("Wellcome to my online tutoring App")
@@ -36,20 +42,20 @@ app.get('/', (req, res, next) => {
 
 
 
-// app.use((req, res, next) => {
-//    const error = new Error('Route Not Found');
-//    error.status = 404;
-//    next(error);
-// })
+app.use((req, res, next) => {
+   const error = new Error('Route Not Found');
+   error.status = 404;
+   next(error);
+})
 
-// app.use((error, req, res, next) => {
-//    res.status(error.status || 500);
-//    res.json({
-//       error: {
-//          message: error.message,
-//       }
-//    })
-// })
+app.use((error, req, res, next) => {
+   res.status(error.status || 500);
+   res.json({
+      error: {
+         message: error.message,
+      }
+   })
+})
 
 
 app.listen(2000);
