@@ -1,10 +1,12 @@
 const router = require("express").Router();
-const userContorller = require("../controllers/users");
+const {becomeAdmin,signin,signup} = require("../controllers/users");
+// const {} = require("../controllers/category");
 const auth = require("../middleware/auth");
-const admin = require("../middleware/admin");
+const adminAuth = require("../middleware/adminAuth");
+const tutorAuth = require("../middleware/adminAuth");
 
-router.post("/signin", userContorller.signin);
-router.post("/signup", userContorller.signup);
-router.get('/admin', auth, userContorller.becomeAdmin);
+router.post("/signin", signin);
+router.post("/signup", signup);
+router.get('/admin', auth, becomeAdmin);
 
 module.exports = router;
