@@ -1,9 +1,5 @@
-const mongoose = require("mongoose");
 const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const debug = require("debug")("app:userController");
-const chalk = require("chalk");
 const Category = require("../models/category");
 const Subject = require("../models/subject");
 
@@ -79,8 +75,7 @@ class subjectController {
 
   static async getAllCategories(req, res) {
     try {
-      const allCat = await Subject.find(
-        {},
+      const allCat = await Subject.find({},
         { _id: 0, category: 1, subject: 1 }
       );
 
@@ -123,19 +118,14 @@ class subjectController {
   static async postSubjectByCategory(req, res, next) {
     /**
      * - provide subject from body and category by params
-     * - check if subject exist in the category (error;)
+     * - check if subject exist in the category throw (error)
      *   else create subject (success)
      * add new subjectID to Category collection( students and tutor) by their category  name (push)
      */
     try {
       const category = req.params.category;
       const subject = req.body.subject;
-      if (!category || !subject)
-        return res.status(400).send("field cannot be empty");
-
-      // const cat = await Subject.findOne({ category })
-      // // console.log(cat);
-      // if (!cat) return res.status(400).send("Given category does not exist")
+      if (!category || !subject) return res.status(400).send("field cannot be empty");
 
       const sub = new Subject({ subject, category });
       const exist = await Subject.exists({ subject, category });
@@ -183,7 +173,6 @@ class subjectController {
       const sub = new Subject({ subject, category });
       const exist = await Subject.exists({ subject, category });
 
-      // console.log("Request.user", req.user._id);
       if (exist) {
         const findSub = await User.findOne({
           _id: req.user._id,
@@ -346,7 +335,6 @@ class subjectController {
         { $pull: { subjects: subDoc._id } },
         { useFindAndModify: false, new: true }
       );
-      // console.log('deleted from categories');
 
       res.status(200).json(tutorDoc);
     } catch (error) {
@@ -359,7 +347,6 @@ class subjectController {
     /**
    get the subject name(params)
    find doc from Subject with the provided params
-
    */
     let subject = req.query.subject;
 
@@ -367,10 +354,7 @@ class subjectController {
     if (!subject) return res.status(404).send("field cannot be empty");
 
     try {
-      // const exist = await Subject.exists({ subject });
-      // if (!exist) return res.status(400).send("Subject does not exist");
-
-      // console.log("exist", exist)
+      console.log("exist", exist)
 
       const result = await Subject.find({
         subject: { $regex: "/" + subject + "/", $options: "i" },

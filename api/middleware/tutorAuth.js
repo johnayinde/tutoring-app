@@ -3,10 +3,9 @@ const jwt = require("jsonwebtoken");
 
 const tutor = async (req, res, next) => {
    try {
-      if (req.user.category === 'tutor') {
-         next()
-
-      } else {
+      if (req.user.category === 'tutor')
+         next();
+      else {
          return res.status(401).send("Not Authorised");
       }
 

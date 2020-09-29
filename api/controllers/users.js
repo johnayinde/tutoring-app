@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const debug = require('debug')('app:userController');
@@ -8,7 +7,6 @@ const chalk = require("chalk");
 class userController {
   static async signup(req, res, next) {
     let { name, password, email, category } = req.body;
-    // category = category.toUpperCase();
     try {
       if (!name || !password || !email) {
         return res.status(400).send("All fields are required");

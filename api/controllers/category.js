@@ -1,9 +1,4 @@
-const mongoose = require("mongoose");
-const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const debug = require('debug')('app:userController');
-const chalk = require("chalk");
 const Category = require("../models/category");
 
 

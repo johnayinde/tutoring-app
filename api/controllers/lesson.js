@@ -1,9 +1,4 @@
-const mongoose = require("mongoose");
 const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const debug = require("debug")("app:userController");
-const chalk = require("chalk");
 const Category = require("../models/category");
 const Lesson = require("../models/lesson");
 const Tutor = require("../models/tutor");
@@ -36,7 +31,7 @@ module.exports = class lessonController {
 
    static async bookLesson_admin(req, res, next) {
       /**
-       * get subject,level,t=name of tutor = req.body
+       * get subject,level,name of tutor
        * create lesson
        * push lesson to category(tutor),
        * push lesson to tutor(name)
@@ -157,10 +152,6 @@ module.exports = class lessonController {
             status: true,
             message: `${deleted.subject} lesson by ${deleted.tutor} deleted`,
          })
-
-
-
-
       } catch (err) {
          console.log(err.stack);
       }

@@ -1,14 +1,7 @@
-const mongoose = require("mongoose");
 const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const debug = require('debug')('app:userController');
-const chalk = require("chalk");
 const Category = require("../models/category");
 const Tutor = require("../models/tutor");
 const Subject = require("../models/subject");
-
-
 
 class tutorController {
 
@@ -18,7 +11,6 @@ class tutorController {
        * chect if tutor exist else save
        * add tutor ID to a category of student
        * add all subjects to tutors(User) subjects[]
-       * 
        * loop subjects and add to Subjects for the category if not exixt save
        * add created subjectId to Category of student
       */
@@ -28,25 +20,17 @@ class tutorController {
 
          const newTutor = new Tutor({ name, level, subject });
          const exist = await Tutor.findOne({ name });
-         // debug(newTutor, exist);
-         // console.log('tutor exist');
 
          if (exist) return res.send(`Tutor with name: ${name} already exist`);
          await newTutor.save();
-         console.log('tutor saved');
-
 
          const updatedCat = await Category.findOneAndUpdate({ category: 'student' }, { $push: { tutors: newTutor._id } }, { useFindAndModify: false, new: true });
          console.log('saved to student cat');
 
-
          const updatedUser = await User.findOneAndUpdate({ _id: req.user._id }, { $push: { subjects: subject } }, { useFindAndModify: false, new: true });
          console.log('saved to user sub');
 
-         // debug(updatedCat, updatedUser)
-
          for (let sub of subject) {
-            // mth,eng
             const subjectExist = await Subject.findOne({ subject: sub })
 
             if (!subjectExist) {
@@ -57,8 +41,6 @@ class tutorController {
                const updateStu = await Category.findOneAndUpdate({ category: 'student' }, { $push: { subjects: newSubject._id } }, { useFindAndModify: false, new: true });
 
                const updateTut = await Category.findOneAndUpdate({ category: 'tutor' }, { $push: { subjects: newSubject._id } }, { useFindAndModify: false, new: true });
-
-               // debug("updated Subject for stud & tut", updateStu, updateTut)
             }
             continue;
          }
