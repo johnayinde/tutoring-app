@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const {becomeAdmin,signin,signup} = require("../controllers/users");
-// const {} = require("../controllers/category");
 const auth = require("../middleware/auth");
 const adminAuth = require("../middleware/adminAuth");
 const tutorAuth = require("../middleware/adminAuth");

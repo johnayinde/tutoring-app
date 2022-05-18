@@ -3,7 +3,7 @@ const express = require('express');
 const PORT = process.env.PORT || 8080;
 
 mongoose
-  .connect(process.env.CONNECTION_URL, {
+  .connect(process.env.CONNECTION_URL || "mongodb://localhost/tutoring_api", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
